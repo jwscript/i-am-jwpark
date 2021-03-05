@@ -5,7 +5,7 @@
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <link href="/webjars/bootstrap/4.6.0/css/bootstrap.min.css" rel="stylesheet">
 
-<title>Index</title>
+<title>List</title>
 </head>
 <body>
 	<nav class="navbar navbar-expand-lg navbar-light bg-light">
@@ -22,7 +22,27 @@
 			</div>
 		</div>
 	</nav>
-	<h1>Index</h1>
+	<div class="container">
+		<table class="table table-condensed">
+			<caption>사용자 목록</caption>
+			<thead>
+				<tr>
+					<th>사용자 아이디</th>
+					<th>이름</th>
+					<th>이메일</th>
+				</tr>
+			</thead>
+			<tbody>
+				{{#users}}
+				<tr>
+					<th scope="row">{{userId}}</th>
+					<td>{{userName}}</td>
+					<td>{{userEmail}}</td>
+				</tr>
+				{{/users}}
+			</tbody>
+		</table>
+	</div>
 	<script src="/webjars/jquery/3.6.0/jquery.min.js"></script>
 	<script src="/webjars/bootstrap/4.6.0/js/bootstrap.bundle.min.js"></script>
 </body>

@@ -14,30 +14,32 @@
 				<a class="navbar-brand" href="#">SLIPP</a>
 			</div>
 
-			<div class="collapse navbar-collapse" id="navbarSupportedContent">
+			<div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
 				<ul class="navbar-nav nav navbar-right">
 					<li class="nav-item"><a class="nav-link" href="/form.html">회원가입</a></li>
+					<li class="nav-item"><a class="nav-link" href="/list">사용자목록</a></li>
 				</ul>
 			</div>
 		</div>
 	</nav>
 	<div class="container">
-		<form>
+		<!-- form의 action attribute는 서버에 요청을 보낼 때, 어느 url로 보낼 것인지 지정. -->
+		<form action="/create" method="post">
 			<div class="mb-3">
 				<label for="userId" class="form-label">사용자 아이디</label>
-				<input type="text" class="form-control" id="userId" placeholder="userId">
+				<input type="text" name="userId" class="form-control" id="userId" placeholder="userId">
 			</div>
 			<div class="mb-3">
 				<label for="password" class="form-label">Password</label>
-				<input type="password" class="form-control" id="password" placeholder="password">
+				<input type="password" name="password" class="form-control" id="password" placeholder="password">
 			</div>
 			<div class="mb-3">
 				<label for="userName" class="form-label">사용자 이름</label>
-				<input type="text" class="form-control" id="exampleInputUserName" placeholder="userName">
+				<input type="text" name="userName" class="form-control" id="exampleInputUserName" placeholder="userName">
 			</div>
 			<div class="mb-3">
 				<label for="userEmail" class="form-label">사용자 이메일</label>
-				<input type="email" class="form-control" id="exampleInputUserEmail" placeholder="userEmail">
+				<input type="email" name="userEmail" class="form-control" id="exampleInputUserEmail" placeholder="userEmail">
 			</div>
 			<button type="submit" class="btn btn-primary">Submit</button>
 		</form>
