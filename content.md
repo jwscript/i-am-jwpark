@@ -7,3 +7,12 @@ local -> git/svn -> DEV/QA/REAL
 Auto Import : Command + Shift + O
 
 Controller에서 return 되는 String은 templates 아래의 파일명임.
+
+EC2 에서 git source 다시 받을 때는, git pull
+
+메이븐 실행 명령어 중 ./mvnw clean package 에서
+clean : target 디렉토리 날리기
+package : 빌드하면서 target 디렉토리 최신화로 생성
+
+[커맨드] Java로 시작하는 프로세스 찾기.
+ps -ef | grep java
