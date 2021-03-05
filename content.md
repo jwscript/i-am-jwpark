@@ -16,3 +16,5 @@ package : 빌드하면서 target 디렉토리 최신화로 생성
 
 [커맨드] Java로 시작하는 프로세스 찾기.
 ps -ef | grep java
+
+메모리 데이터베이스 h2에 테이블 추가하려고 작업한 Schema Class가 export되지 않을 때, application.yaml의 spring.jpa.hibernate.ddl-auto:update 처리로 해결했음.
