@@ -4,28 +4,62 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.PutMapping;
+import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.jwpark.domain.User;
 import net.jwpark.domain.UserDao;
 
+// 이 클래스가 컨트롤러라는 걸 명시하는 어노테이션 Controller
+// 이 클래스에 있는 메서드의 URL의 앞부분이 '/users'로 매핑됨을 선언하는 어노테이션 RequestMapping
 @Controller
+@RequestMapping("/users")
 public class UserController {
 
 	@Autowired
 	private UserDao userDao;
 
-	@PostMapping("/create")
+	@GetMapping("/form")
+	public String form() {
+		return "/user/form";
+	}
+
+	@GetMapping("/{seq}/form")
+	public String updateForm(@PathVariable Long seq, Model model) {
+		// URL에서 파라미터 값을 얻어오는 어노테이션 PathVariable
+		User user = userDao.findById(seq).get();
+		model.addAttribute("user", user);
+
+		return "/user/updateForm";
+	}
+
+	@PutMapping("/{seq}")
+	public String update(@PathVariable Long seq, User updateUser) {
+		User user = userDao.findById(seq).get();
+		user.update(updateUser);
+		userDao.save(user);
+		return "redirect:/users";
+	}
+	
+	@PostMapping("")
 	public String createUser(User user) {
 		System.out.println("user : " + user);
 		// users.add(user);
 		userDao.save(user);
-		return "redirect:/list";
+		return "redirect:/users";
 	}
 
-	@GetMapping("/list")
+	@GetMapping("")
 	public String getUserList(Model model) {
 		model.addAttribute("users", userDao.findAll());
-		return "list";
+		return "/user/list";
 	}
 }
+
+/*
+ * 리턴값으로 경로를 주지 않으면 static 밑에서 일치하는 파일명을 찾아서 씀.
+ * 리턴값으로 경로를 주면 templates에서 해당 경로에 일치하는 파일을 찾아서 씀.
+ *
+ */
