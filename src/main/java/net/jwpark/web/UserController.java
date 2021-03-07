@@ -1,5 +1,7 @@
 package net.jwpark.web;
 
+import javax.servlet.http.HttpSession;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
@@ -20,6 +22,31 @@ public class UserController {
 
 	@Autowired
 	private UserDao userDao;
+
+	@GetMapping("/loginForm")
+	public String loginForm() {
+		return "/user/login";
+	}
+
+	@PostMapping("/login")
+	public String login(String userId, String password, HttpSession session) {
+		User user = userDao.findByUserId(userId);
+		if (user == null) {
+			System.out.println("UserId Fail");
+			return "redirect:/users/loginForm";
+		}
+		
+		// userId가 존재하면 password 비교.
+		if (!password.equals(user.getPassword())) {
+			System.out.println("Password Fail");
+			return "redirect:/users/loginForm";
+		}
+		
+		System.out.println("Login Success");
+		session.setAttribute("user",  user); // userId, password 비교 완료시 세션에 데이터 저장.
+		
+		return "redirect:/";
+	}
 
 	@GetMapping("/form")
 	public String form() {
@@ -42,7 +69,7 @@ public class UserController {
 		userDao.save(user);
 		return "redirect:/users";
 	}
-	
+
 	@PostMapping("")
 	public String createUser(User user) {
 		System.out.println("user : " + user);
@@ -59,7 +86,7 @@ public class UserController {
 }
 
 /*
- * 리턴값으로 경로를 주지 않으면 static 밑에서 일치하는 파일명을 찾아서 씀.
- * 리턴값으로 경로를 주면 templates에서 해당 경로에 일치하는 파일을 찾아서 씀.
+ * 리턴값으로 경로를 주지 않으면 static 밑에서 일치하는 파일명을 찾아서 씀. 리턴값으로 경로를 주면 templates에서 해당 경로에
+ * 일치하는 파일을 찾아서 씀.
  *
  */
