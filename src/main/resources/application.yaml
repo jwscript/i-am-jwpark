@@ -12,7 +12,11 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
+    show-sql: true # 실행할 때, 쿼리 보여주기.
     database-platform: org.hibernate.dialect.H2Dialect
+    properties:
+      hibernate:
+        format_sql: true
     
   mvc:
     hiddenmethod:

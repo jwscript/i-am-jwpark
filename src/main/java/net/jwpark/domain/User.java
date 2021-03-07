@@ -22,13 +22,29 @@ public class User {
 	private String password;
 	private String name;
 	private String email;
-
+	
+	public boolean matchSeq(Long newSeq) {
+		if (newSeq == null) {
+			return false;
+		}
+		
+		return newSeq.equals(seq);
+	}
+	
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-
+	
 	public void setPassword(String password) {
 		this.password = password;
+	}
+
+	public boolean matchPassword(String newPassword) {
+		if (newPassword == null) {
+			return false;
+		}
+
+		return newPassword.equals(password);
 	}
 
 	public void setName(String name) {
@@ -37,14 +53,6 @@ public class User {
 
 	public void setEmail(String email) {
 		this.email = email;
-	}
-
-	public Long getSeq() {
-		return this.seq;
-	}
-
-	public String getPassword() {
-		return this.password;
 	}
 
 	@Override

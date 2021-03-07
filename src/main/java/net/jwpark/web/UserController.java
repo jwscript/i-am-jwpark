@@ -37,20 +37,20 @@ public class UserController {
 		}
 
 		// userId가 존재하면 password 비교.
-		if (!password.equals(user.getPassword())) {
+		if (!user.matchPassword(password)) {
 			System.out.println("Password Fail");
 			return "redirect:/users/loginForm";
 		}
 
 		System.out.println("Login Success");
-		session.setAttribute("sessionedUser", user); // userId, password 비교 완료시 세션에 데이터 저장.
+		session.setAttribute(HttpSessionUtils.USER_SESSION_KEY, user); // userId, password 비교 완료시 세션에 데이터 저장.
 
 		return "redirect:/";
 	}
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("sessionedUser");
+		session.removeAttribute(HttpSessionUtils.USER_SESSION_KEY);
 
 		return "redirect:/";
 	}
@@ -63,13 +63,12 @@ public class UserController {
 	@GetMapping("/{seq}/form")
 	public String updateForm(@PathVariable Long seq, Model model, HttpSession session) {
 		// URL에서 파라미터 값을 얻어오는 어노테이션 PathVariable
-		Object tempUser = session.getAttribute("sessionedUser");
-		if (tempUser == null) {
+		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "redirect:/users/loginForm";
 		}
 
-		User sessionedUser = (User) tempUser;
-		if (!seq.equals(sessionedUser.getSeq())) {
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if (!sessionedUser.matchSeq(seq)) {
 			throw new IllegalStateException("You can't update other user");
 		}
 
@@ -81,13 +80,13 @@ public class UserController {
 
 	@PutMapping("/{seq}")
 	public String update(@PathVariable Long seq, User updateUser, HttpSession session) {
-		Object tempUser = session.getAttribute("sessionedUser");
-		if (tempUser == null) {
+		// URL에서 파라미터 값을 얻어오는 어노테이션 PathVariable
+		if (!HttpSessionUtils.isLoginUser(session)) {
 			return "redirect:/users/loginForm";
 		}
 
-		User sessionedUser = (User) tempUser;
-		if (!seq.equals(sessionedUser.getSeq())) {
+		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
+		if (!sessionedUser.matchSeq(seq)) {
 			throw new IllegalStateException("You can't update other user");
 		}
 
