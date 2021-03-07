@@ -43,15 +43,15 @@ public class UserController {
 		}
 
 		System.out.println("Login Success");
-		session.setAttribute("user", user); // userId, password 비교 완료시 세션에 데이터 저장.
+		session.setAttribute("sessionedUser", user); // userId, password 비교 완료시 세션에 데이터 저장.
 
 		return "redirect:/";
 	}
 
 	@GetMapping("/logout")
 	public String logout(HttpSession session) {
-		session.removeAttribute("user");
-		
+		session.removeAttribute("sessionedUser");
+
 		return "redirect:/";
 	}
 
@@ -61,8 +61,18 @@ public class UserController {
 	}
 
 	@GetMapping("/{seq}/form")
-	public String updateForm(@PathVariable Long seq, Model model) {
+	public String updateForm(@PathVariable Long seq, Model model, HttpSession session) {
 		// URL에서 파라미터 값을 얻어오는 어노테이션 PathVariable
+		Object tempUser = session.getAttribute("sessionedUser");
+		if (tempUser == null) {
+			return "redirect:/users/loginForm";
+		}
+
+		User sessionedUser = (User) tempUser;
+		if (!seq.equals(sessionedUser.getSeq())) {
+			throw new IllegalStateException("You can't update other user");
+		}
+
 		User user = userDao.findById(seq).get();
 		model.addAttribute("user", user);
 
@@ -70,7 +80,17 @@ public class UserController {
 	}
 
 	@PutMapping("/{seq}")
-	public String update(@PathVariable Long seq, User updateUser) {
+	public String update(@PathVariable Long seq, User updateUser, HttpSession session) {
+		Object tempUser = session.getAttribute("sessionedUser");
+		if (tempUser == null) {
+			return "redirect:/users/loginForm";
+		}
+
+		User sessionedUser = (User) tempUser;
+		if (!seq.equals(sessionedUser.getSeq())) {
+			throw new IllegalStateException("You can't update other user");
+		}
+
 		User user = userDao.findById(seq).get();
 		user.update(updateUser);
 		userDao.save(user);

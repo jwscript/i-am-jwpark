@@ -9,7 +9,8 @@ import javax.persistence.Id;
 // User Class가 DB와 연결되는 것이라는 의미의 어노테이션 Entity.
 @Entity
 public class User {
-	// Id: PK 설정용 어노테이션, GeneratedValue: 가장 최근에 추가된 값에서 자동으로 1씩 증가. (이때, 자동 생성 전략은 4가지가 있지만 그 중 IDENTITY를 사용하였음.)
+	// Id: PK 설정용 어노테이션, GeneratedValue: 가장 최근에 추가된 값에서 자동으로 1씩 증가. (이때, 자동 생성 전략은
+	// 4가지가 있지만 그 중 IDENTITY를 사용하였음.)
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
 	private Long seq;
@@ -37,7 +38,11 @@ public class User {
 	public void setEmail(String email) {
 		this.email = email;
 	}
-	
+
+	public Long getSeq() {
+		return this.seq;
+	}
+
 	public String getPassword() {
 		return this.password;
 	}
