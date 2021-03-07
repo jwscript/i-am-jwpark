@@ -31,6 +31,10 @@ public class User {
 		return newSeq.equals(seq);
 	}
 	
+	public String getUserId() {
+		return userId;
+	}
+	
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
