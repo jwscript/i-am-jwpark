@@ -1,0 +1,1 @@
+INSERT INTO USER (USER_ID, PASSWORD, NAME, EMAIL) VALUES ('jwpark99', 'jw99' , '재원', 'java@naver');

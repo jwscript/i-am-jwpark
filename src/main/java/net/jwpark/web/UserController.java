@@ -35,15 +35,22 @@ public class UserController {
 			System.out.println("UserId Fail");
 			return "redirect:/users/loginForm";
 		}
-		
+
 		// userId가 존재하면 password 비교.
 		if (!password.equals(user.getPassword())) {
 			System.out.println("Password Fail");
 			return "redirect:/users/loginForm";
 		}
-		
+
 		System.out.println("Login Success");
-		session.setAttribute("user",  user); // userId, password 비교 완료시 세션에 데이터 저장.
+		session.setAttribute("user", user); // userId, password 비교 완료시 세션에 데이터 저장.
+
+		return "redirect:/";
+	}
+
+	@GetMapping("/logout")
+	public String logout(HttpSession session) {
+		session.removeAttribute("user");
 		
 		return "redirect:/";
 	}

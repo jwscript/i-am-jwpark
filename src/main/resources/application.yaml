@@ -1,6 +1,7 @@
 spring:
   mustache:
     suffix: .html
+    expose-session-attributes: true # Session에 담긴 데이터를 모델에 담아서 템플릿 엔진에 전달해주는 설정.
   
   datasource:
     url: jdbc:h2:~/i-am-jwpark;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -10,7 +11,7 @@ spring:
 
   jpa:
     hibernate:
-      ddl-auto: update
+      ddl-auto: create-drop
     database-platform: org.hibernate.dialect.H2Dialect
     
   mvc:
