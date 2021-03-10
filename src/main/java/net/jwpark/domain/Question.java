@@ -36,6 +36,10 @@ public class Question {
 	@Lob // 255자 보다 긴 데이터를 넣을 수 있게 해줌.
 	@JsonProperty
 	private String contents;
+
+	@JsonProperty
+	private Integer countOfAnswer = 0;
+
 	private LocalDateTime createDate;
 
 	@OneToMany(mappedBy = "question") // Answer.class에서 매핑할 필드 이름을 써야함.
@@ -69,5 +73,13 @@ public class Question {
 
 	public boolean isSameWriter(User loginUser) {
 		return this.writer.equals(loginUser);
+	}
+
+	public void addAnswer() {
+		this.countOfAnswer += 1;
+	}
+	
+	public void deleteAnswer() {
+		this.countOfAnswer -= 1;
 	}
 }

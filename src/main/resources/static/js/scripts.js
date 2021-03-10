@@ -34,8 +34,34 @@ function onSuccess(data, status) {
 	console.log(data);
 
 	var answerTemplate = $("#answerTemplate").html();
-	var template = answerTemplate.format(data.writer.name, data.formattedCreatedDate, data.contents, data.seq, data.seq);
+	var template = answerTemplate.format(data.writer.name, data.formattedCreatedDate, data.contents, data.seq, data.question.seq);
 	$("div.qna-comment-slipp-articles").append(template);
 
 	$("form.answer-write textarea[name=contents]").val('');
+}
+
+$(".link-delete-article").click(deleteAnswer);
+
+function deleteAnswer(e) {
+	e.preventDefault();
+
+	var url = $(this).attr("href");
+	console.log("url: " + url);
+
+	$.ajax({
+		type: 'delete',
+		url: url,
+		dateType: 'json',
+		error: function(xhr, status) {
+			console.log(xhr);
+		},
+		success: function(data, status) {
+			console.log(data);
+			if (data.valid) {
+				$(this).closest('article').remove();
+			} else {
+				alert(data.errorMessage);
+			}
+		}.bind(this)
+	});
 }
