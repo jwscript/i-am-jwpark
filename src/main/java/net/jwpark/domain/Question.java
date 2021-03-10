@@ -2,6 +2,7 @@ package net.jwpark.domain;
 
 import java.time.LocalDateTime;
 import java.time.format.DateTimeFormatter;
+import java.util.List;
 
 import javax.persistence.Entity;
 import javax.persistence.ForeignKey;
@@ -9,7 +10,10 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
+import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
+import javax.persistence.OneToMany;
+import javax.persistence.OrderBy;
 
 @Entity
 public class Question {
@@ -23,8 +27,14 @@ public class Question {
 	private User writer;
 
 	private String title;
+
+	@Lob // 255자 보다 긴 데이터를 넣을 수 있게 해줌.
 	private String contents;
 	private LocalDateTime createDate;
+
+	@OneToMany(mappedBy = "question") // Answer.class에서 매핑할 필드 이름을 써야함.
+	@OrderBy("seq ASC")
+	private List<Answer> answers;
 
 	public Question() {
 	}

@@ -35,7 +35,7 @@ public class QuestionController {
 	@PostMapping("")
 	public String create(String title, String contents, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/users/loginForm";
+			return "redirect:/users/loginForm";
 		}
 
 		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
@@ -54,53 +54,54 @@ public class QuestionController {
 
 	@GetMapping("/{seq}/form")
 	public String updateForm(@PathVariable Long seq, Model model, HttpSession session) {
-		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/users/loginForm";
+		try {
+			Question question = questionDao.findById(seq).get();
+			hasPermission(session, question);
+			model.addAttribute("question", question);
+			return "/qna/updateForm";
+		} catch (IllegalStateException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "/user/login";
 		}
-
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Question question = questionDao.findById(seq).get();
-		if (!question.isSameWriter(loginUser)) {
-			return "/users/loginForm";
-		}
-
-		model.addAttribute("question", question);
-
-		return "/qna/updateForm";
 	}
 
 	@PutMapping("/{seq}")
-	public String update(@PathVariable Long seq, String title, String contents, HttpSession session) {
-		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "redirect:/users/loginForm";
+	public String update(@PathVariable Long seq, String title, String contents, Model model, HttpSession session) {
+		try {
+			Question question = questionDao.findById(seq).get();
+			hasPermission(session, question);
+			question.update(title, contents);
+			questionDao.save(question);
+			return String.format("redirect:/questions/%d", seq);
+		} catch (IllegalStateException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "/user/login";
 		}
-
-		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Question question = questionDao.findById(seq).get();
-		if (!question.isSameWriter(loginUser)) {
-			return "redirect:/users/loginForm";
-		}
-
-		question.update(title, contents);
-		questionDao.save(question);
-
-		return String.format("redirect:/questions/%d", seq);
 	}
 
 	@DeleteMapping("/{seq}")
-	public String delete(@PathVariable Long seq, HttpSession session) {
+	public String delete(@PathVariable Long seq, Model model, HttpSession session) {
+		try {
+			Question question = questionDao.findById(seq).get();
+			hasPermission(session, question);
+			questionDao.deleteById(seq);
+			return "redirect:/";
+		} catch (IllegalStateException e) {
+			model.addAttribute("errorMessage", e.getMessage());
+			return "/user/login";
+		}
+	}
+
+	private boolean hasPermission(HttpSession session, Question question) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "redirect:/users/loginForm";
+			throw new IllegalStateException("You need to login.");
 		}
 
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
-		Question question = questionDao.findById(seq).get();
 		if (!question.isSameWriter(loginUser)) {
-			return "redirect/users/loginForm";
+			throw new IllegalStateException("You need to access auth");
 		}
 
-		questionDao.deleteById(seq);
-
-		return "redirect:/";
+		return true;
 	}
 }
