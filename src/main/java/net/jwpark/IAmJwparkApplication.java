@@ -32,9 +32,9 @@ public class IAmJwparkApplication {
 		return new ApiInfoBuilder().title("I Am Jwpark - API Title").description("I Am Jwpark - API Description")
 				.build();
 	}
-	
+
 	/**
-	 * TODO: 현재 swagger 는 2.9.2 버전을 쓰고 있는데, 3.0.0 버전으로 올리면 에러가 발생함.
-	 * 아마 사용법이 바뀐것 같은데.. 이 부분 언젠가 테스트 해보기.
+	 * TODO: 현재 swagger 는 2.9.2 버전을 쓰고 있는데, 3.0.0 버전으로 올리면 에러가 발생함. 아마 사용법이 바뀐것
+	 * 같은데.. 이 부분 언젠가 테스트 해보기.
 	 */
 }

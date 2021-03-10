@@ -34,7 +34,7 @@ function onSuccess(data, status) {
 	console.log(data);
 
 	var answerTemplate = $("#answerTemplate").html();
-	var template = answerTemplate.format(data.writer.name, data.formattedCreatedDate, data.contents, data.seq, data.question.seq);
+	var template = answerTemplate.format(data.writer.name, data.formattedCreatedDate, data.contents, data.question.seq, data.seq);
 	$("div.qna-comment-slipp-articles").append(template);
 
 	$("form.answer-write textarea[name=contents]").val('');
