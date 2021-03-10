@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 
 import net.jwpark.domain.Question;
 import net.jwpark.domain.QuestionDao;
+import net.jwpark.domain.Result;
 import net.jwpark.domain.User;
 
 @Controller
@@ -54,54 +55,54 @@ public class QuestionController {
 
 	@GetMapping("/{seq}/form")
 	public String updateForm(@PathVariable Long seq, Model model, HttpSession session) {
-		try {
-			Question question = questionDao.findById(seq).get();
-			hasPermission(session, question);
-			model.addAttribute("question", question);
-			return "/qna/updateForm";
-		} catch (IllegalStateException e) {
-			model.addAttribute("errorMessage", e.getMessage());
+		Question question = questionDao.findById(seq).get();
+		Result result = valid(session, question);
+		if (!result.isValid()) {
+			model.addAttribute("errorMessage", result.getErrorMessage());
 			return "/user/login";
 		}
+
+		model.addAttribute("question", question);
+		return "/qna/updateForm";
 	}
 
 	@PutMapping("/{seq}")
 	public String update(@PathVariable Long seq, String title, String contents, Model model, HttpSession session) {
-		try {
-			Question question = questionDao.findById(seq).get();
-			hasPermission(session, question);
-			question.update(title, contents);
-			questionDao.save(question);
-			return String.format("redirect:/questions/%d", seq);
-		} catch (IllegalStateException e) {
-			model.addAttribute("errorMessage", e.getMessage());
+		Question question = questionDao.findById(seq).get();
+		Result result = valid(session, question);
+		if (!result.isValid()) {
+			model.addAttribute("errorMessage", result.getErrorMessage());
 			return "/user/login";
 		}
+
+		question.update(title, contents);
+		questionDao.save(question);
+		return String.format("redirect:/questions/%d", seq);
 	}
 
 	@DeleteMapping("/{seq}")
 	public String delete(@PathVariable Long seq, Model model, HttpSession session) {
-		try {
-			Question question = questionDao.findById(seq).get();
-			hasPermission(session, question);
-			questionDao.deleteById(seq);
-			return "redirect:/";
-		} catch (IllegalStateException e) {
-			model.addAttribute("errorMessage", e.getMessage());
+		Question question = questionDao.findById(seq).get();
+		Result result = valid(session, question);
+		if (!result.isValid()) {
+			model.addAttribute("errorMessage", result.getErrorMessage());
 			return "/user/login";
 		}
+
+		questionDao.deleteById(seq);
+		return "redirect:/";
 	}
 
-	private boolean hasPermission(HttpSession session, Question question) {
+	private Result valid(HttpSession session, Question question) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			throw new IllegalStateException("You need to login.");
+			return Result.fail("You need to login.");
 		}
 
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		if (!question.isSameWriter(loginUser)) {
-			throw new IllegalStateException("You need to access auth");
+			return Result.fail("You need to access auth");
 		}
 
-		return true;
+		return Result.ok();
 	}
 }
