@@ -18,7 +18,8 @@ spring:
       hibernate:
         format_sql: true
     
+  # spring boot 버전업으로 form 태그 하위 input의 _method 추가 방식이 기본값이 false가 되었음.
   mvc:
     hiddenmethod:
       filter:
-        enabled: true
+        enabled: true 
