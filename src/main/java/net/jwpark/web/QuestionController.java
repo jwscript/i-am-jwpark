@@ -82,26 +82,34 @@ public class QuestionController {
 
 	@DeleteMapping("/{seq}")
 	public String delete(@PathVariable Long seq, Model model, HttpSession session) {
+		System.out.println("step 1");
 		Question question = questionDao.findById(seq).get();
 		Result result = valid(session, question);
 		if (!result.isValid()) {
+			System.out.println("step 2");
 			model.addAttribute("errorMessage", result.getErrorMessage());
 			return "/user/login";
 		}
 
+		System.out.println("step 3");
 		questionDao.deleteById(seq);
 		return "redirect:/";
 	}
 
 	private Result valid(HttpSession session, Question question) {
+		System.out.println("step 11");
 		if (!HttpSessionUtils.isLoginUser(session)) {
+			System.out.println("step 12");
 			return Result.fail("You need to login.");
 		}
 
+		System.out.println("step 13");
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		if (!question.isSameWriter(loginUser)) {
+			System.out.println("step 14");
 			return Result.fail("You need to access auth");
 		}
+		System.out.println("step 15");
 
 		return Result.ok();
 	}

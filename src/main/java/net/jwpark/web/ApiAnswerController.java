@@ -49,16 +49,21 @@ public class ApiAnswerController {
 
 	@DeleteMapping("/{seq}")
 	public Result delete(@PathVariable Long questionSeq, @PathVariable Long seq, HttpSession session) {
+		System.out.println("step 1");
 		if (!HttpSessionUtils.isLoginUser(session)) {
+			System.out.println("step 2");
 			return Result.fail("You need to login.");
 		}
 
+		System.out.println("step 3");
 		User loginUser = HttpSessionUtils.getUserFromSession(session);
 		Answer answer = answerDao.findById(seq).get();
 		if (!answer.isSameWriter(loginUser)) {
+			System.out.println("step 4");
 			return Result.fail("You need to access auth.");
 		}
 
+		System.out.println("step 5");
 		answerDao.deleteById(seq);
 		
 		Question question = questionDao.findById(questionSeq).get();

@@ -18,13 +18,7 @@ import javax.persistence.OrderBy;
 import com.fasterxml.jackson.annotation.JsonProperty;
 
 @Entity
-public class Question {
-
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty
-	private Long seq;
-
+public class Question extends AbstractEntity {
 	@ManyToOne // Question n개가 User 1개에 매칭 될 수 있다는 것.
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
 	@JsonProperty
@@ -40,8 +34,6 @@ public class Question {
 	@JsonProperty
 	private Integer countOfAnswer = 0;
 
-	private LocalDateTime createDate;
-
 	@OneToMany(mappedBy = "question") // Answer.class에서 매핑할 필드 이름을 써야함.
 	@OrderBy("seq ASC")
 	private List<Answer> answers;
@@ -54,16 +46,6 @@ public class Question {
 		this.writer = writer;
 		this.title = title;
 		this.contents = contents;
-		this.createDate = LocalDateTime.now();
-	}
-
-	// formattedCreatedDate 라는 변수의 get이라고 생각하면 템플릿에서 어떻게 써야할지 이해할 수 있음.
-	public String getFormattedCreatedDate() {
-		if (createDate == null) {
-			return "";
-		}
-
-		return createDate.format(DateTimeFormatter.ofPattern("yyyy.MM.dd HH:mm:ss"));
 	}
 
 	public void update(String title, String contents) {
@@ -78,7 +60,7 @@ public class Question {
 	public void addAnswer() {
 		this.countOfAnswer += 1;
 	}
-	
+
 	public void deleteAnswer() {
 		this.countOfAnswer -= 1;
 	}

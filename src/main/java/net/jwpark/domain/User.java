@@ -11,14 +11,7 @@ import com.fasterxml.jackson.annotation.JsonProperty;
 
 // User Class가 DB와 연결되는 것이라는 의미의 어노테이션 Entity.
 @Entity
-public class User {
-	// Id: PK 설정용 어노테이션, GeneratedValue: 가장 최근에 추가된 값에서 자동으로 1씩 증가. (이때, 자동 생성 전략은
-	// 4가지가 있지만 그 중 IDENTITY를 사용하였음.)
-	@Id
-	@GeneratedValue(strategy = GenerationType.IDENTITY)
-	@JsonProperty
-	private Long seq;
-
+public class User extends AbstractEntity {
 	// 이 컬럼에는 null 값이 허용되지 않음을 설정.
 	@Column(nullable = false, length = 20)
 	@JsonProperty
@@ -26,29 +19,29 @@ public class User {
 
 	@JsonIgnore
 	private String password;
-	
+
 	@JsonProperty // 이 프로퍼티를 Json으로 변환하겠다는 것.
 	private String name;
-	
+
 	@JsonProperty
 	private String email;
-	
+
 	public boolean matchSeq(Long newSeq) {
 		if (newSeq == null) {
 			return false;
 		}
-		
-		return newSeq.equals(seq);
+
+		return newSeq.equals(super.getSeq());
 	}
-	
+
 	public String getUserId() {
 		return userId;
 	}
-	
+
 	public void setUserId(String userId) {
 		this.userId = userId;
 	}
-	
+
 	public void setPassword(String password) {
 		this.password = password;
 	}
@@ -79,30 +72,5 @@ public class User {
 		this.name = updateUser.name;
 		this.email = updateUser.email;
 
-	}
-
-	@Override
-	public int hashCode() {
-		final int prime = 31;
-		int result = 1;
-		result = prime * result + ((seq == null) ? 0 : seq.hashCode());
-		return result;
-	}
-
-	@Override
-	public boolean equals(Object obj) {
-		if (this == obj)
-			return true;
-		if (obj == null)
-			return false;
-		if (getClass() != obj.getClass())
-			return false;
-		User other = (User) obj;
-		if (seq == null) {
-			if (other.seq != null)
-				return false;
-		} else if (!seq.equals(other.seq))
-			return false;
-		return true;
 	}
 }
