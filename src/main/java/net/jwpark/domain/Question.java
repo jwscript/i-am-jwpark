@@ -15,20 +15,26 @@ import javax.persistence.ManyToOne;
 import javax.persistence.OneToMany;
 import javax.persistence.OrderBy;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class Question {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty
 	private Long seq;
 
 	@ManyToOne // Question n개가 User 1개에 매칭 될 수 있다는 것.
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_question_writer"))
+	@JsonProperty
 	private User writer;
 
+	@JsonProperty
 	private String title;
 
 	@Lob // 255자 보다 긴 데이터를 넣을 수 있게 해줌.
+	@JsonProperty
 	private String contents;
 	private LocalDateTime createDate;
 

@@ -12,22 +12,28 @@ import javax.persistence.JoinColumn;
 import javax.persistence.Lob;
 import javax.persistence.ManyToOne;
 
+import com.fasterxml.jackson.annotation.JsonProperty;
+
 @Entity
 public class Answer {
 
 	@Id
 	@GeneratedValue(strategy = GenerationType.IDENTITY)
+	@JsonProperty
 	private Long seq;
 
 	@ManyToOne // Answer many가 하나의 User에 매핑가능.
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_writer"))
+	@JsonProperty
 	private User writer;
 
 	@ManyToOne // Answer many가 하나의 Question에 매핑 가능.
 	@JoinColumn(foreignKey = @ForeignKey(name = "fk_answer_to_question"))
+	@JsonProperty
 	private Question question;
 	
 	@Lob
+	@JsonProperty
 	private String contents;
 
 	private LocalDateTime createDate;

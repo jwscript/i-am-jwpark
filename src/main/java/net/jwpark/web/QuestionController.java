@@ -27,7 +27,7 @@ public class QuestionController {
 	@GetMapping("/form")
 	public String form(HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "/users/loginForm";
+			return "/user/login";
 		}
 
 		return "/qna/form";
@@ -36,7 +36,7 @@ public class QuestionController {
 	@PostMapping("")
 	public String create(String title, String contents, HttpSession session) {
 		if (!HttpSessionUtils.isLoginUser(session)) {
-			return "redirect:/users/loginForm";
+			return "/user/login";
 		}
 
 		User sessionedUser = HttpSessionUtils.getUserFromSession(session);
