@@ -40,7 +40,7 @@ function onSuccess(data, status) {
 	$("form.answer-write textarea[name=contents]").val('');
 }
 
-$(".link-delete-answer").click(deleteAnswer);
+$(document).on('click', ".link-delete-answer", deleteAnswer);
 
 function deleteAnswer(e) {
 	e.preventDefault();
