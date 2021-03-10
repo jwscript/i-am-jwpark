@@ -1,7 +1,7 @@
 spring:
   mustache:
     suffix: .html
-    expose-session-attributes: true # Session에 담긴 데이터를 모델에 담아서 템플릿 엔진에 전달해주는 설정.
+    expose-session-attributes: true
   
   datasource:
     url: jdbc:h2:~/i-am-jwpark;DB_CLOSE_DELAY=-1;DB_CLOSE_ON_EXIT=FALSE
@@ -12,13 +12,12 @@ spring:
   jpa:
     hibernate:
       ddl-auto: create-drop
-    show-sql: true # 실행할 때, 쿼리 보여주기.
+    show-sql: true
     database-platform: org.hibernate.dialect.H2Dialect
     properties:
       hibernate:
         format_sql: true
     
-  # spring boot 버전업으로 form 태그 하위 input의 _method 추가 방식이 기본값이 false가 되었음.
   mvc:
     hiddenmethod:
       filter:

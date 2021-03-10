@@ -86,3 +86,14 @@ package : 빌드하면서 target 디렉토리 최신화해서 생성.
 10. Tomcat 로그 확인 (Spring console에 뜨던 것과 동일)
 >> cd ~/tomcat/logs
 >> tail -500f catalina.out
+
+--------------------[Application YAML]--------------------------------------------------------
+------------------------------------------------------------------------------------------
+1. spring.mustache.expose-session-attributes
+true : Session에 담긴 데이터를 모델에 담아서 템플릿 엔진에 전달해주는 설정.
+
+2. spring.mvc.hiddenmethod.filter.enabled
+true : spring boot 버전업으로 form 태그 하위 input의 _method 추가 방식이 기본값이 false가 되었음.
+
+3. spring.jpa.show-sql
+true : 실행할 때, 쿼리 보여주기.
